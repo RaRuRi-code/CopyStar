@@ -1,0 +1,635 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ОфисТех - Магазин оргтехники{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main { flex: 1; }
+        
+        /* Navbar */
+        .navbar-custom {
+            background: linear-gradient(135deg, #1e3a8a, #1e40af, #4338ca) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .navbar-brand-custom {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #fff !important;
+            text-decoration: none;
+        }
+        
+        .navbar-brand-custom .brand-icon {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 1.5rem;
+        }
+        
+        .top-bar {
+            background: rgba(0,0,0,0.2);
+            font-size: 0.8rem;
+            padding: 4px 0;
+        }
+        
+        .top-bar a, .top-bar span {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+        }
+        
+        .navbar-custom .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-weight: 500;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: #fff !important;
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .search-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            border-radius: 10px;
+            padding: 8px 16px 8px 40px;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s;
+        }
+        
+        .search-input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-input:focus {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.4);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
+            outline: none;
+            color: #fff;
+        }
+        
+        .search-wrapper {
+            position: relative;
+        }
+        
+        .search-wrapper .fa-search {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .cart-btn {
+            position: relative;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .cart-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Product Card */
+        .product-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        
+        .product-card-img {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-card-img .emoji {
+            font-size: 4rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-card-img .emoji {
+            transform: scale(1.15);
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .out-of-stock-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-card-body {
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #3b82f6;
+            margin-bottom: 6px;
+        }
+        
+        .product-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        
+        .product-name:hover {
+            color: #3b82f6;
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .product-old-price {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+        }
+        
+        footer h5 { color: #fff; font-weight: 700; margin-bottom: 16px; }
+        footer a { color: #94a3b8; text-decoration: none; transition: color 0.2s; }
+        footer a:hover { color: #fff; }
+        
+        .footer-bottom {
+            border-top: 1px solid #1e293b;
+            padding: 16px 0;
+            font-size: 0.85rem;
+        }
+        
+        /* Cart Offcanvas */
+        .offcanvas-cart {
+            width: 420px !important;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 10px;
+        }
+        
+        .cart-item-img {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        
+        .cart-item-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+        
+        .qty-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        
+        /* Toast */
+        .toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideUp 0.3s ease;
+            max-width: 350px;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Hero */
+        .hero-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #4338ca 100%);
+            color: #fff;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        
+        .hero-title span { color: #93c5fd; }
+        
+        .hero-text {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+        
+        /* Filter sidebar */
+        .filter-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .filter-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 14px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .filter-btn:hover { background: #f1f5f9; color: #1e293b; }
+        .filter-btn.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+        
+        /* Page transitions */
+        .page-content {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .hero-section { padding: 50px 0; }
+            .offcanvas-cart { width: 100% !important; }
+        }
+        
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div class="d-flex gap-3">
+                    <span><i class="fas fa-phone-alt me-1"></i> 8 (800) 555-35-35</span>
+                    <span class="d-none d-md-inline"><i class="fas fa-map-marker-alt me-1"></i> Москва, ул. Офисная, 42</span>
+                </div>
+                <span><i class="fas fa-clock me-1"></i> Пн-Пт: 9:00-18:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand-custom" href="{% url 'shop:home' %}">
+                <span class="brand-icon">🖥️</span>
+                <div>
+                    <div style="line-height:1">ОфисТех</div>
+                    <small style="font-size:0.65rem;font-weight:400;opacity:0.7">Магазин оргтехники</small>
+                </div>
+            </a>
+
+            <div class="d-flex align-items-center gap-2 d-lg-none">
+                <button class="cart-btn" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cart-badge-mobile" {% if cart_total_items == 0 %}style="display:none"{% endif %}>
+                        {{ cart_total_items }}
+                    </span>
+                </button>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                    <i class="fas fa-bars text-white"></i>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <div class="d-flex flex-column flex-lg-row align-items-center gap-3 w-100 ms-lg-4 mt-3 mt-lg-0">
+                    <form class="search-wrapper flex-grow-1" style="max-width:400px" action="{% url 'shop:catalog' %}" method="get">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="search-input" name="q" placeholder="Поиск оргтехники..." value="{{ request.GET.q|default:'' }}">
+                    </form>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'shop:home' %}">Главная</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'catalog' %}active{% endif %}" href="{% url 'shop:catalog' %}">Каталог</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'shop:about' %}">О компании</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'delivery' %}active{% endif %}" href="{% url 'shop:delivery' %}">Доставка</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}" href="{% url 'shop:contacts' %}">Контакты</a></li>
+                    </ul>
+                    <button class="cart-btn d-none d-lg-flex" onclick="openCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cart-badge" {% if cart_total_items == 0 %}style="display:none"{% endif %}>
+                            {{ cart_total_items }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span style="font-size:1.8rem">🖥️</span>
+                        <div>
+                            <div class="text-white fw-bold fs-5">ОфисТех</div>
+                            <small style="color:#64748b">Магазин оргтехники</small>
+                        </div>
+                    </div>
+                    <p class="small">Надёжный поставщик оргтехники для бизнеса с 2010 года. Более 10 000 довольных клиентов по всей России.</p>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Каталог</h5>
+                    <ul class="list-unstyled small">
+                        {% for cat in all_categories %}
+                        <li class="mb-2"><a href="{% url 'shop:category_detail' cat.slug %}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <h5>Информация</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="{% url 'shop:about' %}">О компании</a></li>
+                        <li class="mb-2"><a href="{% url 'shop:delivery' %}">Доставка и оплата</a></li>
+                        <li class="mb-2"><a href="{% url 'shop:contacts' %}">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Контакты</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><i class="fas fa-phone-alt me-2" style="color:#60a5fa"></i> 8 (800) 555-35-35</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2" style="color:#60a5fa"></i> info@ofisteh.ru</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2" style="color:#60a5fa"></i> Москва, ул. Офисная, 42</li>
+                    </ul>
+                    <div class="d-flex gap-2 mt-3">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width:36px;height:36px;background:#1e293b;cursor:pointer;font-size:0.75rem;font-weight:700;color:#94a3b8">VK</span>
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width:36px;height:36px;background:#1e293b;cursor:pointer;font-size:0.75rem;font-weight:700;color:#94a3b8">TG</span>
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width:36px;height:36px;background:#1e293b;cursor:pointer;font-size:0.75rem;font-weight:700;color:#94a3b8">YT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container d-flex flex-wrap justify-content-between">
+                <span>© 2024 ОфисТех. Все права защищены.</span>
+                <span>Разработано на Django с ❤️</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Offcanvas -->
+    <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="cartOffcanvas">
+        <div class="offcanvas-header bg-primary text-white">
+            <h5 class="offcanvas-title">
+                <i class="fas fa-shopping-bag me-2"></i>Корзина 
+                <span class="badge bg-white bg-opacity-25 ms-1" id="cart-total-badge">{{ cart_total_items }}</span>
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-3" id="cart-body">
+            {% if cart_total_items == 0 %}
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-bag" style="font-size:4rem;color:#cbd5e1"></i>
+                <p class="text-muted mt-3 fs-5">Корзина пуста</p>
+                <p class="text-muted small">Добавьте товары из каталога</p>
+            </div>
+            {% else %}
+                {% for item in cart %}
+                <div class="cart-item" id="cart-item-{{ item.product.id }}">
+                    <div class="cart-item-img">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                        📦
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-semibold small text-truncate">{{ item.product.name }}</div>
+                        <div class="text-primary fw-bold small">{{ item.total_price|floatformat:0 }} ₽</div>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <button class="qty-btn" onclick="updateCart({{ item.product.id }}, {{ item.quantity|add:-1 }})">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="fw-medium small" style="width:20px;text-align:center">{{ item.quantity }}</span>
+                            <button class="qty-btn" onclick="updateCart({{ item.product.id }}, {{ item.quantity|add:1 }})">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm text-danger ms-auto p-0" onclick="removeFromCart({{ item.product.id }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% if cart_total_items > 0 %}
+        <div class="p-3 border-top bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Итого:</span>
+                <span class="fs-4 fw-bold">{{ cart_total_price|floatformat:0 }} ₽</span>
+            </div>
+            <button class="btn btn-success w-100 fw-bold py-2" onclick="checkout()">
+                <i class="fas fa-check-circle me-2"></i>Оформить заказ
+            </button>
+            <small class="text-muted d-block text-center mt-2">Бесплатная доставка от 30 000 ₽</small>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AJAX JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - ОфисТех{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'shop:catalog' %}" class="text-decoration-none">Каталог</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'shop:category_detail' product.category.slug %}" class="text-decoration-none">{{ product.category.name }}</a></li>
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4 mb-5">
+            <!-- Product Image -->
+            <div class="col-md-5">
+                <div class="bg-white rounded-4 shadow-sm border p-4 text-center" style="min-height:400px;display:flex;align-items:center;justify-content:center">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height:350px">
+                    {% else %}
+                    <span style="font-size:8rem">📦</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-md-7">
+                <div class="product-category mb-2">{{ product.category.name }}</div>
+                <h1 class="fw-bold mb-3">{{ product.name }}</h1>
+                
+                <p class="text-muted mb-4">{{ product.description }}</p>
+
+                <div class="d-flex align-items-end gap-3 mb-3">
+                    <span class="fs-2 fw-bold">{{ product.get_price_display }}</span>
+                    {% if product.old_price %}
+                    <span class="fs-5 text-muted text-decoration-line-through">{{ product.old_price|floatformat:0 }} ₽</span>
+                    <span class="badge bg-danger">-{{ product.get_discount_percentage }}%</span>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {% if product.in_stock %}
+                    <span class="badge bg-success-subtle text-success fs-6">
+                        <i class="fas fa-circle me-1" style="font-size:0.5rem"></i> В наличии
+                    </span>
+                    {% else %}
+                    <span class="badge bg-danger-subtle text-danger fs-6">
+                        <i class="fas fa-circle me-1" style="font-size:0.5rem"></i> Нет в наличии
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2 mb-4">
+                    <button class="btn btn-primary btn-lg flex-grow-1 fw-bold" onclick="addToCart({{ product.id }})" {% if not product.in_stock %}disabled{% endif %}>
+                        <i class="fas fa-shopping-cart me-2"></i>Добавить в корзину
+                    </button>
+                </div>
+
+                <!-- Features -->
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="bg-light rounded-3 p-3 text-center">
+                            <i class="fas fa-truck text-primary mb-2"></i>
+                            <div class="small fw-semibold">Бесплатная доставка</div>
+                            <div class="text-muted" style="font-size:0.75rem">От 30 000 ₽</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-light rounded-3 p-3 text-center">
+                            <i class="fas fa-shield-alt text-primary mb-2"></i>
+                            <div class="small fw-semibold">Гарантия</div>
+                            <div class="text-muted" style="font-size:0.75rem">До 3 лет</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specifications -->
+        {% if specs %}
+        <div class="bg-white rounded-4 shadow-sm border p-4 mb-5">
+            <h3 class="fw-bold mb-4">Характеристики</h3>
+            <div class="row g-3">
+                {% for spec in specs %}
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-between p-3 bg-light rounded-3">
+                        <span class="text-muted">{{ spec.name }}</span>
+                        <span class="fw-semibold">{{ spec.value }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Reviews -->
+        <div class="bg-white rounded-4 shadow-sm border p-4 mb-5">
+            <h3 class="fw-bold mb-4">Отзывы</h3>
+            
+            {% if reviews %}
+            <div class="mb-4">
+                {% for review in reviews %}
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="fw-semibold">{{ review.author_name }}</div>
+                            {% if review.author_role %}
+                            <small class="text-muted">{{ review.author_role }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="text-warning">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star"></i>
+                                {% else %}
+                                <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="text-muted mb-1">{{ review.text }}</p>
+                    <small class="text-muted">{{ review.created_at|date:"d.m.Y" }}</small>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted mb-4">Отзывов пока нет. Будьте первым!</p>
+            {% endif %}
+
+            <!-- Review Form -->
+            <h5 class="fw-bold mb-3">Оставить отзыв</h5>
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-medium">Ваше имя</label>
+                        {{ review_form.author_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-medium">Должность / Компания</label>
+                        {{ review_form.author_role }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-medium">Рейтинг (1-5)</label>
+                        {{ review_form.rating }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-medium">Отзыв</label>
+                        {{ review_form.text }}
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary fw-semibold">
+                            <i class="fas fa-paper-plane me-2"></i>Отправить отзыв
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Related Products -->
+        {% if related_products %}
+        <div class="mb-5">
+            <h3 class="fw-bold mb-4">Похожие товары</h3>
+            <div class="row g-4">
+                {% for product in related_products %}
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="product-card">
+                        <div class="product-card-img">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <span class="emoji">📦</span>
+                            {% endif %}
+                        </div>
+                        <div class="product-card-body">
+                            <div class="product-category">{{ product.category.name }}</div>
+                            <a href="{% url 'shop:product_detail' product.slug %}" class="product-name">{{ product.name }}</a>
+                            <div class="mt-auto">
+                                <div class="d-flex align-items-end mb-3">
+                                    <span class="product-price">{{ product.get_price_display }}</span>
+                                </div>
+                                <button class="btn btn-primary w-100 btn-sm fw-semibold" onclick="addToCart({{ product.id }})" {% if not product.in_stock %}disabled{% endif %}>
+                                    <i class="fas fa-shopping-cart me-1"></i> В корзину
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

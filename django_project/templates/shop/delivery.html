@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Доставка и оплата - ОфисТех{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container py-5">
+        <h1 class="fw-bold mb-5">Доставка и оплата</h1>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="bg-white rounded-4 shadow-sm border p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-3">
+                            <i class="fas fa-truck text-primary fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-0">Доставка по Москве</h4>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Курьерская доставка — <strong>от 500 ₽</strong></li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Бесплатно при заказе от 30 000 ₽</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Срок: 1-2 рабочих дня</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Доставка в день заказа (до 12:00)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-white rounded-4 shadow-sm border p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-3">
+                            <i class="fas fa-box text-success fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-0">Доставка по России</h4>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Транспортные компании — <strong>от 300 ₽</strong></li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>СДЭК, Boxberry, Почта России</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Срок: 3-10 рабочих дней</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Отслеживание посылки онлайн</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <h2 class="fw-bold mb-4">Способы оплаты</h2>
+        <div class="row g-3 mb-5">
+            <div class="col-md-4">
+                <div class="bg-white rounded-4 shadow-sm border text-center p-4">
+                    <i class="fas fa-credit-card text-primary fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Банковская карта</h5>
+                    <p class="text-muted small mb-0">Visa, MasterCard, МИР</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white rounded-4 shadow-sm border text-center p-4">
+                    <i class="fas fa-money-bill-wave text-primary fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Наличные</h5>
+                    <p class="text-muted small mb-0">При получении курьеру</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white rounded-4 shadow-sm border text-center p-4">
+                    <i class="fas fa-file-invoice text-primary fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Безналичный расчёт</h5>
+                    <p class="text-muted small mb-0">Для юридических лиц</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <h2 class="fw-bold mb-4">Часто задаваемые вопросы</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item border rounded-3 mb-2 overflow-hidden">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        Можно ли забрать заказ самостоятельно?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-muted">Да, вы можете забрать заказ из нашего офиса по адресу: Москва, ул. Офисная, 42. Пн-Пт с 9:00 до 18:00.</div>
+                </div>
+            </div>
+            <div class="accordion-item border rounded-3 mb-2 overflow-hidden">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Как отследить заказ?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-muted">После отправки заказа вы получите SMS и email с трек-номером для отслеживания.</div>
+                </div>
+            </div>
+            <div class="accordion-item border rounded-3 mb-2 overflow-hidden">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        Возможна ли доставка в выходные?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-muted">Да, доставка в выходные дни возможна по предварительной договорённости. Стоимость — от 800 ₽.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

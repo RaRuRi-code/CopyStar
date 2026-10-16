@@ -3,661 +3,471 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ОфисТех — Магазин оргтехники</title>
+  <title>ОфисТех — Магазин оргтехники на Django</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary: #1e40af;
-      --primary-light: #3b82f6;
-      --primary-dark: #1e3a8a;
-      --accent: #f59e0b;
-      --success: #10b981;
-      --danger: #ef4444;
-    }
-
     * { font-family: 'Inter', sans-serif; }
-
     body {
-      background: #f8fafc;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
-
-    main { flex: 1; }
-
-    /* Navbar */
-    .navbar-brand-custom {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 1.4rem;
-      color: #fff !important;
-      text-decoration: none;
-    }
-
-    .navbar-brand-custom .brand-icon {
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 1.5rem;
-    }
-
-    .top-bar {
-      background: rgba(0,0,0,0.2);
-      font-size: 0.8rem;
-      padding: 4px 0;
-    }
-
-    .top-bar a, .top-bar span {
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-    }
-
-    .navbar-custom {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary), #4338ca) !important;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    }
-
-    .navbar-custom .nav-link {
-      color: rgba(255,255,255,0.85) !important;
-      font-weight: 500;
-      padding: 8px 16px !important;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    .navbar-custom .nav-link:hover,
-    .navbar-custom .nav-link.active {
-      color: #fff !important;
-      background: rgba(255,255,255,0.15);
-    }
-
-    .search-input {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: #fff;
-      border-radius: 10px;
-      padding: 8px 16px 8px 40px;
-      width: 100%;
-      max-width: 400px;
-      transition: all 0.3s;
-    }
-
-    .search-input::placeholder { color: rgba(255,255,255,0.5); }
-    .search-input:focus {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.4);
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
-      outline: none;
-      color: #fff;
-    }
-
-    .search-wrapper {
-      position: relative;
-    }
-
-    .search-wrapper .fa-search {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255,255,255,0.5);
-    }
-
-    .cart-btn {
-      position: relative;
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: #fff;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 1.2rem;
-      transition: all 0.2s;
-    }
-
-    .cart-btn:hover { background: rgba(255,255,255,0.2); }
-
-    .cart-badge {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      background: var(--danger);
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: bounce 0.3s ease;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-    }
-
-    /* Hero */
-    .hero-section {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, #4338ca 100%);
-      color: #fff;
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #4338ca 50%, #7c3aed 100%);
       padding: 80px 0;
       position: relative;
       overflow: hidden;
     }
-
-    .hero-section::before {
+    .hero::before {
       content: '';
       position: absolute;
       top: -50%;
       right: -20%;
-      width: 600px;
-      height: 600px;
+      width: 800px;
+      height: 800px;
       background: rgba(255,255,255,0.03);
       border-radius: 50%;
     }
-
-    .hero-section::after {
+    .hero::after {
       content: '';
       position: absolute;
       bottom: -30%;
       left: -10%;
-      width: 400px;
-      height: 400px;
+      width: 500px;
+      height: 500px;
       background: rgba(255,255,255,0.03);
       border-radius: 50%;
     }
-
-    .hero-badge {
+    .tech-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
+      gap: 6px;
+      padding: 6px 14px;
       border-radius: 50px;
-      padding: 6px 16px;
       font-size: 0.85rem;
-      margin-bottom: 20px;
-    }
-
-    .hero-title {
-      font-size: 3.2rem;
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    .hero-title span { color: #93c5fd; }
-
-    .hero-text {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.8);
-      max-width: 500px;
-      margin-bottom: 30px;
-    }
-
-    /* Cards */
-    .product-card {
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      border: 1px solid #f1f5f9;
-      transition: all 0.3s ease;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-    }
-
-    .product-card-img {
-      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-      position: relative;
-    }
-
-    .product-card:hover .product-card-img .emoji {
-      transform: scale(1.15);
-    }
-
-    .product-card-img .emoji {
-      transition: transform 0.3s ease;
-    }
-
-    .discount-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--danger);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-
-    .out-of-stock-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .product-card-body {
-      padding: 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .product-category {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--primary-light);
-      margin-bottom: 6px;
-    }
-
-    .product-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 8px;
-      line-height: 1.3;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .product-rating {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-
-    .product-rating .stars { color: #fbbf24; font-size: 0.8rem; }
-    .product-rating .count { color: #94a3b8; font-size: 0.75rem; }
-
-    .product-price {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #1e293b;
-      margin-bottom: 4px;
-    }
-
-    .product-old-price {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      text-decoration: line-through;
-      margin-left: 8px;
-    }
-
-    /* Footer */
-    footer {
-      background: #0f172a;
-      color: #94a3b8;
-    }
-
-    footer h5 { color: #fff; font-weight: 700; margin-bottom: 16px; }
-    footer a { color: #94a3b8; text-decoration: none; transition: color 0.2s; }
-    footer a:hover { color: #fff; }
-
-    .footer-bottom {
-      border-top: 1px solid #1e293b;
-      padding: 16px 0;
-      font-size: 0.85rem;
-    }
-
-    /* Offcanvas Cart */
-    .offcanvas-cart {
-      width: 420px !important;
-    }
-
-    .cart-item {
-      display: flex;
-      gap: 12px;
-      padding: 12px;
-      background: #f8fafc;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      margin-bottom: 10px;
-    }
-
-    .cart-item-img {
-      width: 56px;
-      height: 56px;
-      background: #fff;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      flex-shrink: 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .qty-btn {
-      width: 28px;
-      height: 28px;
-      border: 1px solid #e2e8f0;
-      background: #fff;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 0.8rem;
-    }
-
-    .qty-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
-
-    /* Modal */
-    .modal-product-img {
-      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-      border-radius: 16px;
-      padding: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 6rem;
-    }
-
-    .spec-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: #f8fafc;
-      border-radius: 8px;
-      margin-bottom: 6px;
-    }
-
-    .spec-row .spec-key { color: #64748b; font-size: 0.85rem; }
-    .spec-row .spec-val { color: #1e293b; font-weight: 600; font-size: 0.85rem; }
-
-    /* Toast */
-    .toast-notification {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #1e293b;
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      font-size: 0.9rem;
       font-weight: 500;
-      z-index: 9999;
-      animation: slideUp 0.3s ease;
-      max-width: 350px;
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* Loading skeleton */
-    .skeleton {
-      background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 8px;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* Features */
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-    }
-
-    .feature-icon {
-      background: #eff6ff;
-      padding: 10px;
-      border-radius: 10px;
-      color: var(--primary);
-      font-size: 1.2rem;
-    }
-
-    /* Filter sidebar */
-    .filter-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid #e2e8f0;
-      position: sticky;
-      top: 100px;
-    }
-
-    .filter-btn {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 10px 14px;
-      border: none;
-      background: transparent;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      color: #475569;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .filter-btn:hover { background: #f1f5f9; }
-    .filter-btn.active { background: #eff6ff; color: var(--primary); font-weight: 600; }
-
-    /* Page transitions */
-    .page-content {
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Sale banner */
-    .sale-banner {
-      background: linear-gradient(135deg, #f97316, #ef4444);
-      color: #fff;
-      border-radius: 16px;
-      padding: 30px;
-    }
-
-    /* Reviews */
-    .review-card {
-      background: #fff;
+    .tech-badge-django { background: #064e3b; color: #6ee7b7; }
+    .tech-badge-bootstrap { background: #312e81; color: #c4b5fd; }
+    .tech-badge-ajax { background: #78350f; color: #fcd34d; }
+    .tech-badge-python { background: #1e3a5f; color: #93c5fd; }
+    
+    .feature-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 16px;
       padding: 24px;
-      border: 1px solid #e2e8f0;
-      height: 100%;
+      transition: all 0.3s;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero-title { font-size: 2rem; }
-      .hero-section { padding: 50px 0; }
-      .offcanvas-cart { width: 100% !important; }
+    .feature-card:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-4px);
+    }
+    
+    .code-block {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+    .code-block .comment { color: #64748b; }
+    .code-block .command { color: #60a5fa; }
+    .code-block .string { color: #34d399; }
+    
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    
+    .structure-tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      line-height: 1.8;
+    }
+    .structure-tree .folder { color: #60a5fa; }
+    .structure-tree .file { color: #94a3b8; }
+    .structure-tree .desc { color: #64748b; }
+    
+    .api-row {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+      transition: all 0.2s;
+    }
+    .api-row:hover {
+      background: rgba(255,255,255,0.06);
+    }
+    
+    .method-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .method-get { background: #064e3b; color: #6ee7b7; }
+    .method-post { background: #78350f; color: #fcd34d; }
+    
+    .screenshot-placeholder {
+      background: linear-gradient(135deg, #1e3a8a, #4338ca);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .django-logo {
+      font-size: 5rem;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="container">
-      <div class="d-flex flex-wrap justify-content-between align-items-center">
-        <div class="d-flex gap-3">
-          <span><i class="fas fa-phone-alt me-1"></i> 8 (800) 555-35-35</span>
-          <span class="d-none d-md-inline"><i class="fas fa-map-marker-alt me-1"></i> Москва, ул. Офисная, 42</span>
-        </div>
-        <span><i class="fas fa-clock me-1"></i> Пн-Пт: 9:00-18:00</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-    <div class="container">
-      <a class="navbar-brand-custom" href="#" onclick="navigateTo('home')">
-        <span class="brand-icon">🖥️</span>
-        <div>
-          <div style="line-height:1">ОфисТех</div>
-          <small style="font-size:0.65rem;font-weight:400;opacity:0.7">Магазин оргтехники</small>
-        </div>
-      </a>
-
-      <div class="d-flex align-items-center gap-2 d-lg-none">
-        <button class="cart-btn" onclick="openCart()">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="cart-badge" id="cart-badge-mobile" style="display:none">0</span>
-        </button>
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-          <i class="fas fa-bars text-white"></i>
-        </button>
-      </div>
-
-      <div class="collapse navbar-collapse" id="navMenu">
-        <div class="d-flex flex-column flex-lg-row align-items-center gap-3 w-100 ms-lg-4 mt-3 mt-lg-0">
-          <div class="search-wrapper flex-grow-1" style="max-width:400px">
-            <i class="fas fa-search"></i>
-            <input type="text" class="search-input" id="searchInput" placeholder="Поиск оргтехники..." onkeyup="handleSearchKeyup(event)">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container position-relative" style="z-index:1">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="tech-badge tech-badge-django"><i class="fas fa-server"></i> Django 4.2</span>
+            <span class="tech-badge tech-badge-python"><i class="fab fa-python"></i> Python</span>
+            <span class="tech-badge tech-badge-bootstrap"><i class="fab fa-bootstrap"></i> Bootstrap 5</span>
+            <span class="tech-badge tech-badge-ajax"><i class="fas fa-bolt"></i> AJAX</span>
           </div>
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link active" href="#" data-page="home" onclick="navigateTo('home')">Главная</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" data-page="catalog" onclick="navigateTo('catalog')">Каталог</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" data-page="about" onclick="navigateTo('about')">О компании</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" data-page="delivery" onclick="navigateTo('delivery')">Доставка</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" data-page="contacts" onclick="navigateTo('contacts')">Контакты</a></li>
-          </ul>
-          <button class="cart-btn d-none d-lg-flex" onclick="openCart()">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-badge" id="cart-badge" style="display:none">0</span>
-          </button>
+          <h1 class="display-3 fw-bold mb-3">🖥️ ОфисТех</h1>
+          <h2 class="h3 fw-light mb-4 opacity-75">Интернет-магазин оргтехники</h2>
+          <p class="lead mb-4 opacity-75">
+            Полноценный интернет-магазин с бэкендом на <strong>Django</strong>, 
+            фронтендом на <strong>Bootstrap 5</strong> и <strong>AJAX</strong>-запросами через Fetch API.
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="#setup" class="btn btn-light btn-lg fw-bold px-4">
+              <i class="fas fa-rocket me-2"></i>Инструкция по запуску
+            </a>
+            <a href="#structure" class="btn btn-outline-light btn-lg px-4">
+              <i class="fas fa-folder-tree me-2"></i>Структура проекта
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-5 mt-5 mt-lg-0">
+          <div class="screenshot-placeholder">
+            <div class="django-logo">🐍</div>
+            <div class="h4 fw-bold mb-2">Django + Bootstrap + AJAX</div>
+            <p class="mb-0 opacity-75">Полноценный веб-магазин с бэкендом на Python</p>
+          </div>
         </div>
       </div>
     </div>
-  </nav>
+  </section>
 
-  <!-- Main Content -->
-  <main id="app"></main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container py-5">
+  <!-- Features -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="h2 fw-bold text-center mb-5">Возможности проекта</h2>
       <div class="row g-4">
-        <div class="col-lg-4">
-          <div class="d-flex align-items-center gap-2 mb-3">
-            <span style="font-size:1.8rem">🖥️</span>
-            <div>
-              <div class="text-white fw-bold fs-5">ОфисТех</div>
-              <small style="color:#64748b">Магазин оргтехники</small>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card h-100">
+            <i class="fas fa-database text-primary fs-2 mb-3"></i>
+            <h5 class="fw-bold">Django ORM</h5>
+            <p class="text-muted small mb-0">6 моделей: Категории, Товары, Характеристики, Отзывы, Заказы, Позиции заказа</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card h-100">
+            <i class="fas fa-bolt text-warning fs-2 mb-3"></i>
+            <h5 class="fw-bold">AJAX API</h5>
+            <p class="text-muted small mb-0">8 REST endpoints для корзины, заказов, поиска и отзывов без перезагрузки</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card h-100">
+            <i class="fas fa-paint-brush text-info fs-2 mb-3"></i>
+            <h5 class="fw-bold">Bootstrap 5</h5>
+            <p class="text-muted small mb-0">Адаптивный дизайн, Offcanvas корзина, модальные окна, аккордеоны</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card h-100">
+            <i class="fas fa-shopping-cart text-success fs-2 mb-3"></i>
+            <h5 class="fw-bold">Корзина</h5>
+            <p class="text-muted small mb-0">Сессии Django, добавление/удаление/обновление через AJAX</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Setup -->
+  <section id="setup" class="py-5 bg-dark bg-opacity-50">
+    <div class="container">
+      <h2 class="h2 fw-bold mb-5"><i class="fas fa-rocket me-2"></i>Запуск проекта</h2>
+      
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <!-- Step 1 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">1</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Перейдите в директорию проекта</h5>
+              <div class="code-block">
+                <span class="command">cd</span> django_project
+              </div>
             </div>
           </div>
-          <p class="small">Надёжный поставщик оргтехники для бизнеса с 2010 года. Более 10 000 довольных клиентов по всей России.</p>
+          
+          <!-- Step 2 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">2</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Создайте виртуальное окружение</h5>
+              <div class="code-block">
+                <span class="comment"># Linux/macOS</span><br>
+                <span class="command">python3</span> -m venv venv<br>
+                <span class="command">source</span> venv/bin/activate<br><br>
+                <span class="comment"># Windows</span><br>
+                <span class="command">python</span> -m venv venv<br>
+                venv\Scripts\activate
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 3 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">3</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Установите зависимости</h5>
+              <div class="code-block">
+                <span class="command">pip install</span> -r requirements.txt
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 4 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">4</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Выполните миграции</h5>
+              <div class="code-block">
+                <span class="command">python</span> manage.py migrate
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 5 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">5</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Заполните базу данных товарами</h5>
+              <div class="code-block">
+                <span class="command">python</span> manage.py shell &lt; populate_db.py
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 6 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">6</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Создайте суперпользователя</h5>
+              <div class="code-block">
+                <span class="command">python</span> manage.py createsuperuser
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 7 -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="step-number">7</div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-2">Запустите сервер</h5>
+              <div class="code-block">
+                <span class="command">python</span> manage.py runserver
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-6 col-lg-2">
-          <h5>Каталог</h5>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" onclick="navigateTo('catalog')">Принтеры</a></li>
-            <li class="mb-2"><a href="#" onclick="navigateTo('catalog')">Мониторы</a></li>
-            <li class="mb-2"><a href="#" onclick="navigateTo('catalog')">Сканеры</a></li>
-            <li class="mb-2"><a href="#" onclick="navigateTo('catalog')">Проекторы</a></li>
-            <li class="mb-2"><a href="#" onclick="navigateTo('catalog')">Аксессуары</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-lg-3">
-          <h5>Информация</h5>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" onclick="navigateTo('about')">О компании</a></li>
-            <li class="mb-2"><a href="#" onclick="navigateTo('delivery')">Доставка и оплата</a></li>
-            <li class="mb-2"><a href="#">Гарантия</a></li>
-            <li class="mb-2"><a href="#">Возврат товара</a></li>
-            <li class="mb-2"><a href="#">Политика конфиденциальности</a></li>
-          </ul>
-        </div>
-        <div class="col-lg-3">
-          <h5>Контакты</h5>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><i class="fas fa-phone-alt text-primary me-2" style="color:#60a5fa"></i> 8 (800) 555-35-35</li>
-            <li class="mb-2"><i class="fas fa-envelope text-primary me-2" style="color:#60a5fa"></i> info@ofisteh.ru</li>
-            <li class="mb-2"><i class="fas fa-map-marker-alt text-primary me-2" style="color:#60a5fa"></i> Москва, ул. Офисная, 42</li>
-          </ul>
-          <div class="d-flex gap-2 mt-3">
-            <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width:36px;height:36px;background:#1e293b;cursor:pointer;font-size:0.75rem;font-weight:700;color:#94a3b8">VK</span>
-            <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width:36px;height:36px;background:#1e293b;cursor:pointer;font-size:0.75rem;font-weight:700;color:#94a3b8">TG</span>
-            <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width:36px;height:36px;background:#1e293b;cursor:pointer;font-size:0.75rem;font-weight:700;color:#94a3b8">YT</span>
+        
+        <div class="col-lg-5">
+          <div class="bg-dark rounded-4 p-4 border border-secondary border-opacity-25 sticky-top" style="top:20px">
+            <h5 class="fw-bold mb-3"><i class="fas fa-globe me-2"></i>После запуска</h5>
+            <div class="mb-3">
+              <div class="text-muted small mb-1">Сайт:</div>
+              <a href="http://127.0.0.1:8000" class="text-info text-decoration-none">http://127.0.0.1:8000</a>
+            </div>
+            <div class="mb-3">
+              <div class="text-muted small mb-1">Админ-панель:</div>
+              <a href="http://127.0.0.1:8000/admin" class="text-info text-decoration-none">http://127.0.0.1:8000/admin</a>
+            </div>
+            <hr class="border-secondary">
+            <h6 class="fw-bold mb-2">Тестовые данные:</h6>
+            <ul class="list-unstyled small text-muted mb-0">
+              <li class="mb-1">📦 16 товаров</li>
+              <li class="mb-1">📂 6 категорий</li>
+              <li class="mb-1">⭐ 3 отзыва</li>
+              <li>📝 ~80 характеристик</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <div class="container d-flex flex-wrap justify-content-between">
-        <span>© 2024 ОфисТех. Все права защищены.</span>
-        <span>Разработано с ❤️ для вашего бизнеса</span>
+  </section>
+
+  <!-- Structure -->
+  <section id="structure" class="py-5">
+    <div class="container">
+      <h2 class="h2 fw-bold mb-5"><i class="fas fa-folder-tree me-2"></i>Структура проекта</h2>
+      
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="bg-dark rounded-4 p-4 border border-secondary border-opacity-25">
+            <h5 class="fw-bold mb-3">📁 django_project/</h5>
+            <div class="structure-tree">
+              ├── <span class="file">manage.py</span> <span class="desc"># Управление Django</span><br>
+              ├── <span class="file">requirements.txt</span> <span class="desc"># Зависимости</span><br>
+              ├── <span class="file">populate_db.py</span> <span class="desc"># Заполнение БД</span><br>
+              ├── <span class="folder">ofisteh/</span> <span class="desc"># Настройки проекта</span><br>
+              │   ├── <span class="file">settings.py</span><br>
+              │   ├── <span class="file">urls.py</span><br>
+              │   └── <span class="file">wsgi.py</span><br>
+              ├── <span class="folder">shop/</span> <span class="desc"># Приложение магазина</span><br>
+              │   ├── <span class="file">models.py</span> <span class="desc"># 6 моделей</span><br>
+              │   ├── <span class="file">views.py</span> <span class="desc"># Views + AJAX API</span><br>
+              │   ├── <span class="file">urls.py</span> <span class="desc"># Маршруты</span><br>
+              │   ├── <span class="file">forms.py</span> <span class="desc"># Формы</span><br>
+              │   ├── <span class="file">admin.py</span> <span class="desc"># Админка</span><br>
+              │   ├── <span class="file">cart.py</span> <span class="desc"># Корзина (сессии)</span><br>
+              │   └── <span class="file">context_processors.py</span><br>
+              ├── <span class="folder">templates/</span> <span class="desc"># HTML шаблоны</span><br>
+              │   ├── <span class="file">base.html</span> <span class="desc"># Базовый шаблон</span><br>
+              │   └── <span class="folder">shop/</span><br>
+              │       ├── <span class="file">home.html</span><br>
+              │       ├── <span class="file">catalog.html</span><br>
+              │       ├── <span class="file">product_detail.html</span><br>
+              │       ├── <span class="file">checkout.html</span><br>
+              │       └── <span class="desc">... ещё 4 шаблона</span><br>
+              └── <span class="folder">static/js/</span><br>
+                  └── <span class="file">main.js</span> <span class="desc"># AJAX JavaScript</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <h5 class="fw-bold mb-3">🔌 AJAX API Endpoints</h5>
+          <div class="d-flex flex-column gap-2">
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-post">POST</span>
+              <code class="text-info">/api/cart/add/</code>
+              <span class="text-muted small ms-auto">Добавить в корзину</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-post">POST</span>
+              <code class="text-info">/api/cart/remove/</code>
+              <span class="text-muted small ms-auto">Удалить из корзины</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-post">POST</span>
+              <code class="text-info">/api/cart/update/</code>
+              <span class="text-muted small ms-auto">Обновить количество</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-get">GET</span>
+              <code class="text-info">/api/cart/detail/</code>
+              <span class="text-muted small ms-auto">Содержимое корзины</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-post">POST</span>
+              <code class="text-info">/api/order/create/</code>
+              <span class="text-muted small ms-auto">Создать заказ</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-get">GET</span>
+              <code class="text-info">/api/search/</code>
+              <span class="text-muted small ms-auto">Поиск с подсказками</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-get">GET</span>
+              <code class="text-info">/api/product/&lt;slug&gt;/reviews/</code>
+              <span class="text-muted small ms-auto">Отзывы товара</span>
+            </div>
+            <div class="api-row d-flex align-items-center gap-3">
+              <span class="method-badge method-post">POST</span>
+              <code class="text-info">/api/review/add/</code>
+              <span class="text-muted small ms-auto">Добавить отзыв</span>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Pages -->
+  <section class="py-5 bg-dark bg-opacity-50">
+    <div class="container">
+      <h2 class="h2 fw-bold mb-5"><i class="fas fa-file-alt me-2"></i>Страницы сайта</h2>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <h6 class="fw-bold mb-1">🏠 Главная</h6>
+            <p class="text-muted small mb-0">Hero-секция, популярные товары, блок акций</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <h6 class="fw-bold mb-1">📦 Каталог</h6>
+            <p class="text-muted small mb-0">Фильтры, сортировка, поиск, категории</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <h6 class="fw-bold mb-1">🔍 Товар</h6>
+            <p class="text-muted small mb-0">Характеристики, отзывы, похожие товары</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <h6 class="fw-bold mb-1">🛒 Оформление заказа</h6>
+            <p class="text-muted small mb-0">Форма заказа с AJAX-отправкой</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <h6 class="fw-bold mb-1">🏢 О компании</h6>
+            <p class="text-muted small mb-0">Информация, статистика, команда</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <h6 class="fw-bold mb-1">📞 Контакты</h6>
+            <p class="text-muted small mb-0">Контактная информация, форма обратной связи</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-4 text-center text-muted border-top border-secondary border-opacity-25">
+    <div class="container">
+      <p class="mb-1">🐍 Проект разработан на <strong>Django</strong> + <strong>Bootstrap 5</strong> + <strong>AJAX</strong></p>
+      <small>Полный код находится в директории <code class="text-info">django_project/</code></small>
     </div>
   </footer>
 
-  <!-- Cart Offcanvas -->
-  <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="cartOffcanvas">
-    <div class="offcanvas-header bg-primary text-white">
-      <h5 class="offcanvas-title"><i class="fas fa-shopping-bag me-2"></i>Корзина <span class="badge bg-white bg-opacity-25 ms-1" id="cart-total-badge">0</span></h5>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body p-3" id="cart-body">
-      <!-- Cart items rendered here -->
-    </div>
-    <div class="p-3 border-top bg-light" id="cart-footer" style="display:none">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">Итого:</span>
-        <span class="fs-4 fw-bold" id="cart-total">0 ₽</span>
-      </div>
-      <button class="btn btn-success w-100 fw-bold py-2" onclick="checkout()">
-        <i class="fas fa-check-circle me-2"></i>Оформить заказ
-      </button>
-      <small class="text-muted d-block text-center mt-2">Бесплатная доставка от 30 000 ₽</small>
-    </div>
-  </div>
-
-  <!-- Product Modal -->
-  <div class="modal fade" id="productModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content border-0 shadow-lg" style="border-radius:20px;overflow:hidden" id="product-modal-content">
-        <!-- Rendered by JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast container -->
-  <div id="toast-container"></div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="/src/app.js"></script>
 </body>
 </html>

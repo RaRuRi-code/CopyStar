@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Оформление заказа - ОфисТех{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container py-4">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Главная</a></li>
+                <li class="breadcrumb-item active">Оформление заказа</li>
+            </ol>
+        </nav>
+
+        <h1 class="fw-bold mb-4">Оформление заказа</h1>
+
+        <div class="row g-4">
+            <!-- Order Form -->
+            <div class="col-lg-8">
+                <div class="bg-white rounded-4 shadow-sm border p-4">
+                    <h4 class="fw-bold mb-4">Данные для доставки</h4>
+                    <form id="orderForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-medium">Имя *</label>
+                                <input type="text" class="form-control" name="first_name" placeholder="Иван" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-medium">Фамилия *</label>
+                                <input type="text" class="form-control" name="last_name" placeholder="Иванов" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-medium">Email *</label>
+                                <input type="email" class="form-control" name="email" placeholder="ivan@example.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-medium">Телефон *</label>
+                                <input type="tel" class="form-control" name="phone" placeholder="+7 (999) 123-45-67" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-medium">Город *</label>
+                                <input type="text" class="form-control" name="city" placeholder="Москва" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-medium">Почтовый индекс *</label>
+                                <input type="text" class="form-control" name="postal_code" placeholder="123456" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-medium">Адрес доставки *</label>
+                                <textarea class="form-control" name="address" rows="3" placeholder="ул. Примерная, д. 1, кв. 1" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-medium">Комментарий к заказу</label>
+                                <textarea class="form-control" name="comment" rows="3" placeholder="Дополнительная информация..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div id="orderError" class="alert alert-danger d-none"></div>
+                                <div id="orderSuccess" class="alert alert-success d-none"></div>
+                                <button type="submit" class="btn btn-success btn-lg w-100 fw-bold py-3">
+                                    <i class="fas fa-check-circle me-2"></i>Подтвердить заказ
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="bg-white rounded-4 shadow-sm border p-4 sticky-top" style="top:100px">
+                    <h4 class="fw-bold mb-4">Ваш заказ</h4>
+                    
+                    {% if cart_total_items > 0 %}
+                    <div class="mb-3">
+                        {% for item in cart %}
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="font-size:1.5rem">
+                                    {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="" style="width:30px;height:30px;object-fit:contain">
+                                    {% else %}
+                                    📦
+                                    {% endif %}
+                                </span>
+                                <div>
+                                    <div class="small fw-semibold">{{ item.product.name }}</div>
+                                    <small class="text-muted">{{ item.quantity }} шт. × {{ item.price|floatformat:0 }} ₽</small>
+                                </div>
+                            </div>
+                            <div class="fw-bold">{{ item.total_price|floatformat:0 }} ₽</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="fs-5 fw-bold">Итого:</span>
+                        <span class="fs-4 fw-bold text-primary">{{ cart_total_price|floatformat:0 }} ₽</span>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center py-3">Корзина пуста</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const errorEl = document.getElementById('orderError');
+    const successEl = document.getElementById('orderSuccess');
+    
+    errorEl.classList.add('d-none');
+    successEl.classList.add('d-none');
+    
+    fetch('{% url "shop:order_create" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            successEl.textContent = data.message;
+            successEl.classList.remove('d-none');
+            this.reset();
+            // Update cart badge
+            updateCartBadge(0);
+            setTimeout(() => {
+                window.location.href = '{% url "shop:home" %}';
+            }, 2000);
+        } else {
+            errorEl.textContent = data.message;
+            errorEl.classList.remove('d-none');
+        }
+    })
+    .catch(error => {
+        errorEl.textContent = 'Ошибка при оформлении заказа';
+        errorEl.classList.remove('d-none');
+    });
+});
+</script>
+{% endblock %}

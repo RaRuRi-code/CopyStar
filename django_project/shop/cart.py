@@ -1,0 +1,93 @@
+from decimal import Decimal
+from django.conf import settings
+from .models import Product
+
+
+class Cart:
+    """Корзина покупок"""
+    
+    def __init__(self, request):
+        """Инициализация корзины"""
+        self.session = request.session
+        cart = self.session.get(settings.CART_SESSION_ID)
+        
+        if not cart:
+            cart = self.session[settings.CART_SESSION_ID] = {}
+        
+        self.cart = cart
+    
+    def __iter__(self):
+        """Итерация по товарам корзины"""
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        cart = self.cart.copy()
+        
+        for product in products:
+            cart[str(product.id)]['product'] = product
+        
+        for item in cart.values():
+            item['price'] = Decimal(item['price'])
+            item['total_price'] = item['price'] * item['quantity']
+            yield item
+    
+    def __len__(self):
+        """Подсчёт количества товаров"""
+        return sum(item['quantity'] for item in self.cart.values())
+    
+    def add(self, product, quantity=1, override_quantity=False):
+        """Добавить товар в корзину"""
+        product_id = str(product.id)
+        
+        if product_id not in self.cart:
+            self.cart[product_id] = {
+                'quantity': 0,
+                'price': str(product.price)
+            }
+        
+        if override_quantity:
+            self.cart[product_id]['quantity'] = quantity
+        else:
+            self.cart[product_id]['quantity'] += quantity
+        
+        self.save()
+    
+    def save(self):
+        """Сохранить корзину в сессию"""
+        self.session.modified = True
+    
+    def remove(self, product):
+        """Удалить товар из корзины"""
+        product_id = str(product.id)
+        
+        if product_id in self.cart:
+            del self.cart[product_id]
+            self.save()
+    
+    def clear(self):
+        """Очистить корзину"""
+        del self.session[settings.CART_SESSION_ID]
+        self.save()
+    
+    def get_total_price(self):
+        """Получить общую стоимость"""
+        total = Decimal('0')
+        for item in self.cart.values():
+            total += Decimal(item['price']) * item['quantity']
+        return total
+    
+    def get_items(self):
+        """Получить список товаров"""
+        items = []
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        
+        for product in products:
+            item_data = self.cart[str(product.id)]
+            items.append({
+                'product': product,
+                'quantity': item_data['quantity'],
+                'price': Decimal(item_data['price']),
+                'total_price': Decimal(item_data['price']) * item_data['quantity'],
+            })
+        
+        return items

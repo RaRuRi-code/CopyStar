@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - ОфисТех{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container py-4">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'shop:catalog' %}" class="text-decoration-none">Каталог</a></li>
+                <li class="breadcrumb-item active">{{ category.name }}</li>
+            </ol>
+        </nav>
+
+        <h1 class="fw-bold mb-1">{{ category.icon }} {{ category.name }}</h1>
+        {% if category.description %}
+        <p class="text-muted mb-4">{{ category.description }}</p>
+        {% endif %}
+
+        <div class="row g-4">
+            {% for product in products %}
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="product-card">
+                    <div class="product-card-img">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <span class="emoji">📦</span>
+                        {% endif %}
+                        {% if product.get_discount_percentage > 0 %}
+                        <span class="discount-badge">-{{ product.get_discount_percentage }}%</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-card-body">
+                        <a href="{% url 'shop:product_detail' product.slug %}" class="product-name">{{ product.name }}</a>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-end mb-3">
+                                <span class="product-price">{{ product.get_price_display }}</span>
+                                {% if product.old_price %}
+                                <span class="product-old-price">{{ product.old_price|floatformat:0 }} ₽</span>
+                                {% endif %}
+                            </div>
+                            <button class="btn btn-primary w-100 btn-sm fw-semibold" onclick="addToCart({{ product.id }})" {% if not product.in_stock %}disabled{% endif %}>
+                                <i class="fas fa-shopping-cart me-1"></i> В корзину
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">В этой категории пока нет товаров</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

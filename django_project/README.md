@@ -189,6 +189,42 @@ Django автоматически перезагружает сервер при
 
 MIT License
 
+## 🚀 Публикация на GitHub
+
+Подробная инструкция по публикации проекта на GitHub находится в файлах:
+
+- **[GITHUB_GUIDE.md](GITHUB_GUIDE.md)** - полное руководство с примерами
+- **[QUICK_START.md](QUICK_START.md)** - шпаргалка с основными командами
+- **publish_to_github.sh** - автоматический скрипт для Linux/macOS
+- **publish_to_github.bat** - автоматический скрипт для Windows
+
+### Быстрая публикация (Linux/macOS):
+
+```bash
+cd django_project
+chmod +x publish_to_github.sh
+./publish_to_github.sh
+```
+
+### Быстрая публикация (Windows):
+
+```cmd
+cd django_project
+publish_to_github.bat
+```
+
+Или вручную:
+
+```bash
+cd django_project
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/ВАШ_ЛОГИН/ofisteh-shop.git
+git branch -M main
+git push -u origin main
+```
+
 ---
 
 **Разработано с ❤️ на Django**

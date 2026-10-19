@@ -460,6 +460,81 @@
     </div>
   </section>
 
+  <!-- GitHub Publishing -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="h2 fw-bold mb-5"><i class="fab fa-github me-2"></i>Публикация на GitHub</h2>
+      
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="bg-dark rounded-4 p-4 border border-secondary border-opacity-25">
+            <h5 class="fw-bold mb-3">🚀 Быстрый старт (копируйте команды):</h5>
+            
+            <div class="code-block mb-3">
+              <span class="comment"># 1. Перейдите в папку проекта</span><br>
+              <span class="command">cd</span> django_project<br><br>
+              <span class="comment"># 2. Инициализируйте Git</span><br>
+              <span class="command">git</span> init<br>
+              <span class="command">git</span> add .<br>
+              <span class="command">git</span> commit -m <span class="string">"Initial commit"</span><br><br>
+              <span class="comment"># 3. Создайте репозиторий на GitHub</span><br>
+              <span class="comment"># Перейдите на https://github.com/new</span><br><br>
+              <span class="comment"># 4. Свяжите с GitHub и отправьте код</span><br>
+              <span class="command">git</span> remote add origin https://github.com/ВАШ_ЛОГИН/ofisteh-shop.git<br>
+              <span class="command">git</span> branch -M main<br>
+              <span class="command">git</span> push -u origin main
+            </div>
+            
+            <div class="alert alert-info border-0 mb-0">
+              <i class="fas fa-info-circle me-2"></i>
+              <strong>Совет:</strong> Используйте автоматические скрипты для публикации:
+              <ul class="mb-0 mt-2 small">
+                <li><code>publish_to_github.bat</code> - для Windows</li>
+                <li><code>./publish_to_github.sh</code> - для Linux/macOS</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4">
+          <div class="bg-dark rounded-4 p-4 border border-secondary border-opacity-25 h-100">
+            <h5 class="fw-bold mb-3">📚 Документация</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-3">
+                <i class="fas fa-book text-info me-2"></i>
+                <a href="django_project/GITHUB_GUIDE.md" class="text-decoration-none">
+                  <strong>Полное руководство</strong>
+                </a>
+                <br><small class="text-muted">Подробная инструкция с примерами</small>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-bolt text-warning me-2"></i>
+                <a href="django_project/QUICK_START.md" class="text-decoration-none">
+                  <strong>Быстрый старт</strong>
+                </a>
+                <br><small class="text-muted">Шпаргалка с командами</small>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-terminal text-success me-2"></i>
+                <a href="django_project/publish_to_github.sh" class="text-decoration-none">
+                  <strong>Скрипт для Linux/macOS</strong>
+                </a>
+                <br><small class="text-muted">Автоматическая публикация</small>
+              </li>
+              <li>
+                <i class="fab fa-windows text-primary me-2"></i>
+                <a href="django_project/publish_to_github.bat" class="text-decoration-none">
+                  <strong>Скрипт для Windows</strong>
+                </a>
+                <br><small class="text-muted">BAT файл для Windows</small>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="py-4 text-center text-muted border-top border-secondary border-opacity-25">
     <div class="container">

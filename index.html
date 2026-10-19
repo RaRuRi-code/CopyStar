@@ -460,38 +460,50 @@
     </div>
   </section>
 
-  <!-- GitHub Publishing -->
+  <!-- Installation Guide -->
   <section class="py-5">
     <div class="container">
-      <h2 class="h2 fw-bold mb-5"><i class="fab fa-github me-2"></i>Публикация на GitHub</h2>
+      <h2 class="h2 fw-bold mb-5"><i class="fas fa-rocket me-2"></i>Установка Django проекта</h2>
       
       <div class="row g-4">
         <div class="col-lg-8">
           <div class="bg-dark rounded-4 p-4 border border-secondary border-opacity-25">
-            <h5 class="fw-bold mb-3">🚀 Быстрый старт (копируйте команды):</h5>
-            
-            <div class="code-block mb-3">
-              <span class="comment"># 1. Перейдите в папку проекта</span><br>
-              <span class="command">cd</span> django_project<br><br>
-              <span class="comment"># 2. Инициализируйте Git</span><br>
-              <span class="command">git</span> init<br>
-              <span class="command">git</span> add .<br>
-              <span class="command">git</span> commit -m <span class="string">"Initial commit"</span><br><br>
-              <span class="comment"># 3. Создайте репозиторий на GitHub</span><br>
-              <span class="comment"># Перейдите на https://github.com/new</span><br><br>
-              <span class="comment"># 4. Свяжите с GitHub и отправьте код</span><br>
-              <span class="command">git</span> remote add origin https://github.com/ВАШ_ЛОГИН/ofisteh-shop.git<br>
-              <span class="command">git</span> branch -M main<br>
-              <span class="command">git</span> push -u origin main
+            <div class="alert alert-warning border-0 mb-3">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <strong>ВАЖНО:</strong> Сначала запустите скрипт установки, чтобы создать все файлы Django!
             </div>
             
-            <div class="alert alert-info border-0 mb-0">
-              <i class="fas fa-info-circle me-2"></i>
-              <strong>Совет:</strong> Используйте автоматические скрипты для публикации:
-              <ul class="mb-0 mt-2 small">
-                <li><code>publish_to_github.bat</code> - для Windows</li>
-                <li><code>./publish_to_github.sh</code> - для Linux/macOS</li>
-              </ul>
+            <h5 class="fw-bold mb-3">🚀 Шаг 1: Запустите скрипт установки</h5>
+            <div class="code-block mb-3">
+              <span class="comment"># Создаст ВСЕ файлы Django проекта</span><br>
+              <span class="command">chmod</span> +x setup_complete.sh<br>
+              <span class="command">./setup_complete.sh</span>
+            </div>
+            
+            <h5 class="fw-bold mb-3 mt-4">📦 Шаг 2: Установите зависимости</h5>
+            <div class="code-block mb-3">
+              <span class="command">pip install</span> -r requirements.txt
+            </div>
+            
+            <h5 class="fw-bold mb-3 mt-4">🗄️ Шаг 3: Создайте базу данных</h5>
+            <div class="code-block mb-3">
+              <span class="command">python</span> manage.py migrate<br>
+              <span class="command">python</span> manage.py shell &lt; populate_db.py
+            </div>
+            
+            <h5 class="fw-bold mb-3 mt-4">👤 Шаг 4: Создайте суперпользователя</h5>
+            <div class="code-block mb-3">
+              <span class="command">python</span> manage.py createsuperuser
+            </div>
+            
+            <h5 class="fw-bold mb-3 mt-4">🌐 Шаг 5: Запустите сервер</h5>
+            <div class="code-block mb-3">
+              <span class="command">python</span> manage.py runserver
+            </div>
+            
+            <div class="alert alert-success border-0 mb-0 mt-4">
+              <i class="fas fa-check-circle me-2"></i>
+              <strong>Готово!</strong> Откройте http://127.0.0.1:8000
             </div>
           </div>
         </div>
@@ -502,32 +514,43 @@
             <ul class="list-unstyled mb-0">
               <li class="mb-3">
                 <i class="fas fa-book text-info me-2"></i>
-                <a href="django_project/GITHUB_GUIDE.md" class="text-decoration-none">
+                <a href="INSTALLATION_GUIDE.md" class="text-decoration-none">
                   <strong>Полное руководство</strong>
                 </a>
-                <br><small class="text-muted">Подробная инструкция с примерами</small>
-              </li>
-              <li class="mb-3">
-                <i class="fas fa-bolt text-warning me-2"></i>
-                <a href="django_project/QUICK_START.md" class="text-decoration-none">
-                  <strong>Быстрый старт</strong>
-                </a>
-                <br><small class="text-muted">Шпаргалка с командами</small>
+                <br><small class="text-muted">Все файлы Django с кодом</small>
               </li>
               <li class="mb-3">
                 <i class="fas fa-terminal text-success me-2"></i>
-                <a href="django_project/publish_to_github.sh" class="text-decoration-none">
-                  <strong>Скрипт для Linux/macOS</strong>
+                <a href="setup_complete.sh" class="text-decoration-none">
+                  <strong>Скрипт установки</strong>
                 </a>
-                <br><small class="text-muted">Автоматическая публикация</small>
+                <br><small class="text-muted">Автоматическое создание файлов</small>
+              </li>
+              <li class="mb-3">
+                <i class="fas fa-database text-warning me-2"></i>
+                <a href="populate_db.py" class="text-decoration-none">
+                  <strong>Заполнение БД</strong>
+                </a>
+                <br><small class="text-muted">16 товаров, 6 категорий</small>
               </li>
               <li>
-                <i class="fab fa-windows text-primary me-2"></i>
-                <a href="django_project/publish_to_github.bat" class="text-decoration-none">
-                  <strong>Скрипт для Windows</strong>
+                <i class="fas fa-file-alt text-primary me-2"></i>
+                <a href="README.md" class="text-decoration-none">
+                  <strong>README</strong>
                 </a>
-                <br><small class="text-muted">BAT файл для Windows</small>
+                <br><small class="text-muted">Описание проекта</small>
               </li>
+            </ul>
+            
+            <hr class="border-secondary my-4">
+            
+            <h6 class="fw-bold mb-2">📦 Что создаст скрипт:</h6>
+            <ul class="list-unstyled small text-muted mb-0">
+              <li class="mb-1">✅ ofisteh/ (настройки Django)</li>
+              <li class="mb-1">✅ shop/ (приложение магазина)</li>
+              <li class="mb-1">✅ templates/ (HTML шаблоны)</li>
+              <li class="mb-1">✅ static/js/ (JavaScript)</li>
+              <li>✅ 6 моделей БД</li>
             </ul>
           </div>
         </div>
